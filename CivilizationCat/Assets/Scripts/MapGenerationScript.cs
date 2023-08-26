@@ -7,7 +7,7 @@ public class MapGenerationScript : MonoBehaviour
     public GameObject map;
     public GameObject field;
     public static GameObject[,] fields;
-    public int len;
+    public static int len = 4;
     private float _hex_size_default_x = 1;
     private float _hex_size_default_y = 1;
     private float _map_size_x = 8;
@@ -17,6 +17,7 @@ public class MapGenerationScript : MonoBehaviour
 
     void Start()
     {
+        
         fields = new GameObject[len, len];
 
         field.transform.localScale = new Vector3(((_map_size_x - ((len - 1) * offset)) / len) * _hex_size_default_x, ((_map_size_y - ((len - 1) * offset)) / len) * _hex_size_default_y, field.transform.localScale.z);
@@ -37,7 +38,7 @@ public class MapGenerationScript : MonoBehaviour
                 }
                 else
                 {
-                    new_field = Instantiate(field, new Vector3(x + (field.transform.localScale.x * field.transform.Find("FieldSprite").localScale.x / 2), nY, 0), Quaternion.identity); 
+                    new_field = Instantiate(field, new Vector3(x + ((field.transform.localScale.x * field.transform.Find("FieldSprite").localScale.x - (offset/2)) / 2), nY, 0), Quaternion.identity); 
                 }
                
 

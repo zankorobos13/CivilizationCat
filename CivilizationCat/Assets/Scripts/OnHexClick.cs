@@ -8,6 +8,7 @@ public class OnHexClick : MonoBehaviour
     void Start()
     {
         _fields = MapGenerationScript.fields;
+        
     }
 
     private void OnMouseDown()
