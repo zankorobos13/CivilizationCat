@@ -17,7 +17,6 @@ public class OnHexClick : MonoBehaviour
             for (int j = 0; j < _fields.GetLength(1); j++)
                 if (_fields[i, j].transform.position == gameObject.transform.position)
                     Debug.Log(i + " " + j);
-        
     }
 
     
