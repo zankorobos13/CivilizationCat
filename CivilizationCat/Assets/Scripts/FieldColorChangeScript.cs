@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FieldColorChangeScript : MonoBehaviour
 {
-    public static Color[] colors = new Color[] { Color.white, Color.green, Color.red, Color.blue, Color.yellow, Color.magenta, Color.cyan };
+    public static Color32[] colors = new Color32[] { Color.white, new Color32(186, 255, 201, 255), new Color32(255, 180, 187, 255), new Color32(117, 200, 204, 255), new Color32(255, 254, 187, 255), new Color32(255, 224, 186, 255)};
     private GameObject landscape;
 
     public GameObject plain;
@@ -31,7 +31,11 @@ public class FieldColorChangeScript : MonoBehaviour
             {
                 if (gameObject.transform.position == MapGenerationScript.fields[i, j].transform.position)
                 {
-                    Child.GetComponent<SpriteRenderer>().color = colors[Main.map[i, j].government.id];
+                    if (Main.map[i, j].government != null)
+                        Child.GetComponent<SpriteRenderer>().color = colors[Main.map[i, j].government.id];
+                    else
+                        Child.GetComponent<SpriteRenderer>().color = colors[0];
+
 
                     switch (Main.map[i, j].landscape)
                     {

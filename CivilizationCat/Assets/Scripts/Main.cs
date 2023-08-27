@@ -5,7 +5,7 @@ using UnityEngine;
 public class Main : MonoBehaviour
 {
     public static FieldClass.Field[,] map;
-    public static int number_of_governments = 5;
+    public static int number_of_governments = 1; // Максимум - 5
     
     void Start()
     {
@@ -91,7 +91,12 @@ public class Main : MonoBehaviour
 
             for (int i = 0; i < map.GetLength(0); i++)
                 for (int j = 0; j < map.GetLength(1); j++)
-                    if (map[i, j].government.id != 0)
+                    if (map[i, j].government.id == 0)
+                        map[i, j].government = null;
+
+            for (int i = 0; i < map.GetLength(0); i++)
+                for (int j = 0; j < map.GetLength(1); j++)
+                    if (map[i, j].government != null)
                         map[i, j].landscape = FieldClass.Field.Landscape.City;
 
         } while (!isGeneratedCorrectly);

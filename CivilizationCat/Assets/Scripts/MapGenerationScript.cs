@@ -38,7 +38,10 @@ public class MapGenerationScript : MonoBehaviour
                 }
                 else
                 {
-                    new_field = Instantiate(field, new Vector3(x + ((field.transform.localScale.x * field.transform.Find("FieldSprite").localScale.x - (offset/2)) / 2), nY, 0), Quaternion.identity); 
+                    if (len <= 11)
+                        new_field = Instantiate(field, new Vector3(x + ((field.transform.localScale.x * field.transform.Find("FieldSprite").localScale.x - (offset * (18 / len))) / 2), nY, 0), Quaternion.identity); 
+                    else
+                        new_field = Instantiate(field, new Vector3(x + ((field.transform.localScale.x * field.transform.Find("FieldSprite").localScale.x - (offset * (1.5f - (0.06666f * len)))) / 2), nY, 0), Quaternion.identity);
                 }
                
 
