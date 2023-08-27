@@ -7,7 +7,7 @@ public class MapGenerationScript : MonoBehaviour
     public GameObject map;
     public GameObject field;
     public static GameObject[,] fields;
-    public static int len = 15;
+    public static int len = 10;
     private float _hex_size_default_x = 1;
     private float _hex_size_default_y = 1;
     private float _map_size_x = 9;

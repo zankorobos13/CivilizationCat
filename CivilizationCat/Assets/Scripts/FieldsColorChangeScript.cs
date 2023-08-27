@@ -12,9 +12,8 @@ public class FieldsColorChangeScript : MonoBehaviour
         
     }
 
-    void Update()
+    public static void UpdateMap()
     {
-
         for (int i = 0; i < MapGenerationScript.fields.GetLength(0); i++)
         {
             for (int j = 0; j < MapGenerationScript.fields.GetLength(1); j++)
@@ -37,7 +36,7 @@ public class FieldsColorChangeScript : MonoBehaviour
                         Landscape.transform.Find("Plain2").gameObject.SetActive(true);
                         break;
                     case FieldClass.Field.Landscape.Forest:
-                        Landscape.transform.Find("Forest1").gameObject.SetActive(true);
+                        Landscape.transform.Find("Forest2").gameObject.SetActive(true);
                         break;
                     case FieldClass.Field.Landscape.Mountain:
                         Landscape.transform.Find("Mountain1").gameObject.SetActive(true);
@@ -46,7 +45,7 @@ public class FieldsColorChangeScript : MonoBehaviour
                         Landscape.transform.Find("Fortress1").gameObject.SetActive(true);
                         break;
                     case FieldClass.Field.Landscape.City:
-                        Landscape.transform.Find("City1").gameObject.SetActive(true);
+                        Landscape.transform.Find("City3").gameObject.SetActive(true);
                         break;
                     default:
                         break;
