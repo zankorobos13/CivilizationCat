@@ -88,7 +88,11 @@ public class Main : MonoBehaviour
                 for (int j = 0; j < map.GetLength(1); j++)
                     if (map[i, j].government.id == -1)
                         map[i, j].government.id = 0;
-                        
+
+            for (int i = 0; i < map.GetLength(0); i++)
+                for (int j = 0; j < map.GetLength(1); j++)
+                    if (map[i, j].government.id != 0)
+                        map[i, j].landscape = FieldClass.Field.Landscape.City;
 
         } while (!isGeneratedCorrectly);
 

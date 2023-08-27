@@ -7,11 +7,11 @@ public class MapGenerationScript : MonoBehaviour
     public GameObject map;
     public GameObject field;
     public static GameObject[,] fields;
-    public static int len = 4;
+    public static int len = 10;
     private float _hex_size_default_x = 1;
     private float _hex_size_default_y = 1;
-    private float _map_size_x = 8;
-    private float _map_size_y = 8;
+    private float _map_size_x = 9;
+    private float _map_size_y = 9;
     public float offset;
 
 
@@ -50,7 +50,7 @@ public class MapGenerationScript : MonoBehaviour
             j = 0;
         }
 
-        map.transform.position = new Vector2(-8.5f, -4f);
+        map.transform.position = new Vector2(-8.5f, -5f);
     }
 
 }
