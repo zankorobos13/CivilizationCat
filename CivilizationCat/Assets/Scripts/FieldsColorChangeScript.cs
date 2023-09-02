@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class FieldsColorChangeScript : MonoBehaviour
 {
-    public static Color32[] colors = new Color32[] { Color.white, new Color32(186, 255, 201, 255), new Color32(255, 180, 187, 255), new Color32(117, 200, 204, 255), new Color32(255, 254, 187, 255), new Color32(255, 224, 186, 255) };
+    public static Color32[] colors;
     public static int player_color_id = 5;
 
-    void Start()
+    void Awake()
     {
         colors = new Color32[] { Color.white, new Color32(186, 255, 201, 255), new Color32(255, 180, 187, 255), new Color32(117, 200, 204, 255), new Color32(255, 254, 187, 255), new Color32(255, 224, 186, 255) };
 
