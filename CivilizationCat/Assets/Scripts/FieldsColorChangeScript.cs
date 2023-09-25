@@ -5,7 +5,7 @@ using UnityEngine;
 public class FieldsColorChangeScript : MonoBehaviour
 {
     public static Color32[] colors;
-    public static int player_color_id = 5;
+    public static int player_color_id = 1;
 
     void Awake()
     {
