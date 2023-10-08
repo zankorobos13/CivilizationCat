@@ -20,8 +20,8 @@ public class OnHexClick : MonoBehaviour
                     Debug.Log(i + " " + j + " - " + Main.Government.isNeighbour(Main.map, 1, new int[] { i, j }, false));
                     Main.coords[0] = i;
                     Main.coords[1] = j;
+                    InfoCanvasesScript.isNeedToUpdate = true;
                 }
-                    
     }
 
     

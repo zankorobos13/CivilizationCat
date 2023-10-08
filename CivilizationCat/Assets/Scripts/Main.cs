@@ -130,6 +130,8 @@ public class Main : MonoBehaviour
         {
             switch (choosen_action)
             {
+                // coords = new int[] { -1, -1 }; делать только после выполнения действия ((не важно?) удачного или неудачного)
+                // choosen_action = Government.Action.Void; делать только после выполнения действия ((не важно?) удачного или неудачного) 
                 case Government.Action.Colonize:
                     if (coords[0] != -1)
                     {
@@ -137,32 +139,44 @@ public class Main : MonoBehaviour
                             Debug.Log("УСПЕХ!");
                         else
                             Debug.LogError("ОШИБКА!!!");
-                        coords[0] = -1;
-                        coords[1] = -1;
+
+                        coords = new int[] { -1, -1 };
+                        choosen_action = Government.Action.Void;
                     }
 
                     break;
                 case Government.Action.FoundCity:
+                    coords = new int[] { -1, -1 };
                     break;
                 case Government.Action.AppointGovernor:
+                    coords = new int[] { -1, -1 };
                     break;
                 case Government.Action.TakeTaxes:
+                    coords = new int[] { -1, -1 };
                     break;
                 case Government.Action.GiveBribe:
+                    coords = new int[] { -1, -1 };
                     break;
                 case Government.Action.Attack:
+                    coords = new int[] { -1, -1 };
                     break;
                 case Government.Action.Rob:
+                    coords = new int[] { -1, -1 };
                     break;
                 case Government.Action.BoostArmy:
+                    coords = new int[] { -1, -1 };
                     break;
                 case Government.Action.Research:
+                    coords = new int[] { -1, -1 };
                     break;
                 case Government.Action.Diplomacy:
+                    coords = new int[] { -1, -1 };
                     break;
                 default:
                     break;
             }
+
+            //choosen_action = Government.Action.Void; // Не уверен в правильности
         }
     }
 
