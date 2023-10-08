@@ -8,5 +8,6 @@ public class OnActionButtonsClick : MonoBehaviour
     {
         Debug.Log(number_of_action);
         Main.choosen_action = Main.Government.actions[number_of_action];
+        InfoCanvasesScript.isNeedToUpdate = true;
     }
 }
