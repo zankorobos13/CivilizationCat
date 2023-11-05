@@ -1,20 +1,17 @@
 using UnityEngine;
+using System.Collections.Generic;
+
 
 public class Main : MonoBehaviour
 {
     // id игрока = 1, governments[0]
-    /*
-     
-     
-     CДЕЛАТЬ ОДНОЗНАЧНЫЙ ПОРЯДОК ДЕЙСТВИЙ - СНАЧАЛА ВЫБОР ДЕЙСТВИЯ, ПОТОМ ВЫБОР КЛЕТКИ
-     
-     
-     */
+   
     public static FieldClass.Field[,] map;
     public static int number_of_governments = 5; // Максимум - 5
     
     public static Government.Action choosen_action = Government.Action.Void;
     public static int[] coords = new int[] { -1, -1 };
+    public static bool is_coords_choosen = false;
     
     void Start()
     {
@@ -138,56 +135,49 @@ public class Main : MonoBehaviour
             {
                 case Government.Action.TakeTaxes:
                     coords = new int[] { -1, -1 };
+                    is_coords_choosen = false;
                     break;
                 case Government.Action.GiveBribe:
                     coords = new int[] { -1, -1 };
+                    is_coords_choosen = false;
                     break;
                 case Government.Action.BoostArmy:
                     coords = new int[] { -1, -1 };
+                    is_coords_choosen = false;
                     break;
                 case Government.Action.Research:
                     coords = new int[] { -1, -1 };
+                    is_coords_choosen = false;
                     break;
                 case Government.Action.Diplomacy:
                     coords = new int[] { -1, -1 };
+                    is_coords_choosen = false;
                     break;
             }
         }
         
 
 
-        if (coords[0] != -1)
+        if (is_coords_choosen)
         {
-            switch (choosen_action)
-            {
-                // coords = new int[] { -1, -1 }; делать только после выполнения действия ((не важно?) удачного или неудачного)
-                // choosen_action = Government.Action.Void; делать только после выполнения действия ((не важно?) удачного или неудачного) 
-                case Government.Action.Colonize:
-                    if (coords[0] != -1)
-                    {
-                        if (Government.governments[0].DoAction(map, Government.Action.Colonize, coords))
-                            Debug.Log("УСПЕХ!");
-                        else
-                            Debug.LogError("ОШИБКА!!!");
+            
+            
+            // coords = new int[] { -1, -1 }; делать только после выполнения действия ((не важно?) удачного или неудачного)
+            // choosen_action = Government.Action.Void; делать только после выполнения действия ((не важно?) удачного или неудачного) 
+                
+            
+            if (Government.governments[0].DoAction(map, choosen_action, coords))
+                Debug.Log("УСПЕХ!");
+            else
+                Debug.LogError("ОШИБКА!!!");
 
-                        coords = new int[] { -1, -1 };
-                        choosen_action = Government.Action.Void;
-                    }
+            choosen_action = Government.Action.Void;
+            
+            InfoCanvasesScript.isNeedToUpdate = true;
+            coords = new int[] { -1, -1 };
+            is_coords_choosen = false;
+            
 
-                    break;
-                case Government.Action.FoundCity:
-                    coords = new int[] { -1, -1 };
-                    break;
-                case Government.Action.AppointGovernor:
-                    coords = new int[] { -1, -1 };
-                    break;
-                case Government.Action.Attack:
-                    coords = new int[] { -1, -1 };
-                    break;
-                case Government.Action.Rob:
-                    coords = new int[] { -1, -1 };
-                    break;
-            }
 
             //choosen_action = Government.Action.Void; // Не уверен в правильности
         }
@@ -199,10 +189,64 @@ public class Main : MonoBehaviour
         public static Government[] governments;
         public int id;
 
-        private int population;
-        private int food;
-        private int materials;
-        private int jewelry;
+        private float population;
+        private float food;
+        private float materials;
+        private float jewelry;
+
+        // Армия
+
+        public float infantry = 1;
+        public float knights;
+        public float siege = 1;
+
+
+
+        // Прописать нормальные цены
+
+        private static Dictionary<string, float> base_food_costs = new Dictionary<string, float> {
+            {"Colonize", 0 },
+            {"FoundCity", 0 },
+            {"AppointGovernor", 0 },
+            {"TakeTaxes", 0 },
+            {"GiveBribe", 0 },
+            {"Attack", 0 },
+            {"Rob", 0 },
+            {"BoostArmy", 0 },
+            {"Research", 0 },
+            {"Diplomacy", 0 },
+
+        };
+
+        private static Dictionary<string, float> base_materials_costs = new Dictionary<string, float> {
+            {"Colonize", 0 },
+            {"FoundCity", 0 },
+            {"AppointGovernor", 0 },
+            {"TakeTaxes", 0 },
+            {"GiveBribe", 0 },
+            {"Attack", 0 },
+            {"Rob", 0 },
+            {"BoostArmy", 0 },
+            {"Research", 0 },
+            {"Diplomacy", 0 },
+
+        };
+
+        private static Dictionary<string, float> base_jewelry_costs = new Dictionary<string, float> {
+            {"Colonize", 0 },
+            {"FoundCity", 0 },
+            {"AppointGovernor", 0 },
+            {"TakeTaxes", 0 },
+            {"GiveBribe", 0 },
+            {"Attack", 0 },
+            {"Rob", 0 },
+            {"BoostArmy", 0 },
+            {"Research", 0 },
+            {"Diplomacy", 0 },
+
+        };
+
+        private Dictionary<string, float>[] costs = new Dictionary<string, float>[] { base_food_costs, base_materials_costs, base_jewelry_costs };
 
         public enum Action
         {
@@ -239,6 +283,11 @@ public class Main : MonoBehaviour
         public Government(int id)
         {
             this.id = id;
+
+            population = 100;
+            food = 100;
+            materials = 50;
+            jewelry = 0;
         }
 
         // Для игрока
@@ -248,10 +297,14 @@ public class Main : MonoBehaviour
             switch (action)
             {
                 case Action.Colonize:
-                    if (isNeighbour(map, id, coords) && true) // Потом дописать ресурсы
+                    if (isNeighbour(map, id, coords) && food >= costs[0]["Colonize"] && materials >= costs[1]["Colonize"] && jewelry >= costs[2]["Colonize"])
                     {
-                        map[coords[0], coords[1]].government = new Government(id);
+                        map[coords[0], coords[1]].government = governments[id - 1];
                         FieldsColorChangeScript.UpdateMap();
+                        food -= costs[0]["Colonize"];
+                        materials -= costs[1]["Colonize"];
+                        jewelry -= costs[2]["Colonize"];
+
                         return true;
                     }
                     break;
@@ -268,7 +321,62 @@ public class Main : MonoBehaviour
                     FieldsColorChangeScript.UpdateMap();
                     break;
                 case Action.Attack:
-                    FieldsColorChangeScript.UpdateMap();
+                    Debug.LogWarning("ATTACK");
+                    if (isNeighbour(map, id, coords, true) && food >= costs[0]["Attack"] && materials >= costs[1]["Attack"] && jewelry >= costs[2]["Attack"])
+                    {
+                        Debug.LogWarning("ATTACK TRUE");
+                        FieldClass.Field enemy_field = map[coords[0], coords[1]];
+                        Government enemy_government = enemy_field.government;
+
+                        FieldClass.Field.Landscape landscape = enemy_field.landscape;
+                        float enemy_infantry = enemy_government.infantry;
+                        float enemy_knights = enemy_government.knights;
+                        float enemy_siege = enemy_government.siege;
+
+                        float strenght;
+                        float enemy_strenght;
+
+                        // Подумать над формулой для рыцарей
+
+                        switch (landscape)
+                        {
+                            case FieldClass.Field.Landscape.Plain:
+                                strenght = (3 * infantry) + (6 * knights) + (0 * siege);
+                                enemy_strenght = (3 * infantry) + (6 * knights) + (0 * siege);
+                                break;
+                            case FieldClass.Field.Landscape.Forest:
+                                strenght = (3 * infantry) + (5 * knights) + (0 * siege);
+                                enemy_strenght = (5 * infantry) + (5 * knights) + (0 * siege);
+                                break;
+                            case FieldClass.Field.Landscape.Mountain:
+                                strenght = (3 * infantry) + (0 * knights) + (3 * siege);
+                                enemy_strenght = (7 * infantry) + (0 * knights) + (1 * siege);
+                                break;
+                            default: // Форт или город
+                                strenght = (3 * infantry) + (0 * knights) + (27 * siege);
+                                enemy_strenght = (9 * infantry) + (0 * knights) + (9 * siege);
+                                break;
+                        }
+                        Debug.LogWarning(landscape);
+                        Debug.LogWarning(strenght);
+                        Debug.LogWarning(enemy_strenght);
+                        float win_chance = 0.5f + (((strenght - enemy_strenght) / (strenght + enemy_strenght)) * 1.2f);
+                        Debug.LogWarning(win_chance);
+                        System.Random random = new System.Random();
+
+                        if (random.NextDouble() < win_chance)
+                        {
+                            map[coords[0], coords[1]].government = governments[id - 1];
+                        }
+
+                        FieldsColorChangeScript.UpdateMap();
+
+                        food -= costs[0]["Attack"];
+                        materials -= costs[1]["Attack"];
+                        jewelry -= costs[2]["Attack"];
+
+                        return true;
+                    }
                     break;
                 case Action.Rob:
                     FieldsColorChangeScript.UpdateMap();
