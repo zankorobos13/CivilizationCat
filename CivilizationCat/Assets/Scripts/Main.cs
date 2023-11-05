@@ -3,7 +3,13 @@ using UnityEngine;
 public class Main : MonoBehaviour
 {
     // id игрока = 1, governments[0]
-
+    /*
+     
+     
+     CДЕЛАТЬ ОДНОЗНАЧНЫЙ ПОРЯДОК ДЕЙСТВИЙ - СНАЧАЛА ВЫБОР ДЕЙСТВИЯ, ПОТОМ ВЫБОР КЛЕТКИ
+     
+     
+     */
     public static FieldClass.Field[,] map;
     public static int number_of_governments = 5; // Максимум - 5
     
@@ -130,6 +136,30 @@ public class Main : MonoBehaviour
         {
             switch (choosen_action)
             {
+                case Government.Action.TakeTaxes:
+                    coords = new int[] { -1, -1 };
+                    break;
+                case Government.Action.GiveBribe:
+                    coords = new int[] { -1, -1 };
+                    break;
+                case Government.Action.BoostArmy:
+                    coords = new int[] { -1, -1 };
+                    break;
+                case Government.Action.Research:
+                    coords = new int[] { -1, -1 };
+                    break;
+                case Government.Action.Diplomacy:
+                    coords = new int[] { -1, -1 };
+                    break;
+            }
+        }
+        
+
+
+        if (coords[0] != -1)
+        {
+            switch (choosen_action)
+            {
                 // coords = new int[] { -1, -1 }; делать только после выполнения действия ((не важно?) удачного или неудачного)
                 // choosen_action = Government.Action.Void; делать только после выполнения действия ((не важно?) удачного или неудачного) 
                 case Government.Action.Colonize:
@@ -151,28 +181,11 @@ public class Main : MonoBehaviour
                 case Government.Action.AppointGovernor:
                     coords = new int[] { -1, -1 };
                     break;
-                case Government.Action.TakeTaxes:
-                    coords = new int[] { -1, -1 };
-                    break;
-                case Government.Action.GiveBribe:
-                    coords = new int[] { -1, -1 };
-                    break;
                 case Government.Action.Attack:
                     coords = new int[] { -1, -1 };
                     break;
                 case Government.Action.Rob:
                     coords = new int[] { -1, -1 };
-                    break;
-                case Government.Action.BoostArmy:
-                    coords = new int[] { -1, -1 };
-                    break;
-                case Government.Action.Research:
-                    coords = new int[] { -1, -1 };
-                    break;
-                case Government.Action.Diplomacy:
-                    coords = new int[] { -1, -1 };
-                    break;
-                default:
                     break;
             }
 
@@ -185,6 +198,11 @@ public class Main : MonoBehaviour
     {
         public static Government[] governments;
         public int id;
+
+        private int population;
+        private int food;
+        private int materials;
+        private int jewelry;
 
         public enum Action
         {
@@ -226,6 +244,7 @@ public class Main : MonoBehaviour
         // Для игрока
         public bool DoAction(FieldClass.Field[,] map, Action action, int[] coords)
         {
+            // Потом дописать ресурсы!!!
             switch (action)
             {
                 case Action.Colonize:

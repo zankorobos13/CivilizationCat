@@ -18,8 +18,11 @@ public class OnHexClick : MonoBehaviour
                 if (_fields[i, j].transform.position == gameObject.transform.position)
                 {
                     Debug.Log(i + " " + j + " - " + Main.Government.isNeighbour(Main.map, 1, new int[] { i, j }, false));
-                    Main.coords[0] = i;
-                    Main.coords[1] = j;
+                    if (Main.choosen_action != Main.Government.Action.Void)
+                    {
+                        Main.coords[0] = i;
+                        Main.coords[1] = j;
+                    }
                     InfoCanvasesScript.isNeedToUpdate = true;
                 }
     }
