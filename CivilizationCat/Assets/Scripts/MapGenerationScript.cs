@@ -53,7 +53,7 @@ public class MapGenerationScript : MonoBehaviour
             j = 0;
         }
 
-        map.transform.position = new Vector2(-8.5f, -3.3f);
+        map.transform.position = new Vector2(-8f, -3.3f);
     }
 
 }

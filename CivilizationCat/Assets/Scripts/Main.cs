@@ -361,8 +361,10 @@ public class Main : MonoBehaviour
                         Debug.LogWarning(strenght);
                         Debug.LogWarning(enemy_strenght);
                         float win_chance = 0.5f + (((strenght - enemy_strenght) / (strenght + enemy_strenght)) * 1.2f);
-                        Debug.LogWarning(win_chance);
                         System.Random random = new System.Random();
+                        win_chance += (float)random.NextDouble()/5f - 0.1f; // Ёлемент рандома
+
+                        Debug.LogWarning(win_chance);
 
                         if (random.NextDouble() < win_chance)
                         {
