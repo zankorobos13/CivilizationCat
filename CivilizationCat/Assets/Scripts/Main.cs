@@ -124,6 +124,7 @@ public class Main : MonoBehaviour
         } while (!isGeneratedCorrectly);
 
         FieldsColorChangeScript.UpdateMap();
+        ResourcesTextScript.UpdateTexts();
     }
 
     
@@ -176,8 +177,9 @@ public class Main : MonoBehaviour
             InfoCanvasesScript.isNeedToUpdate = true;
             coords = new int[] { -1, -1 };
             is_coords_choosen = false;
-            
 
+            ResourcesTextScript.UpdateTexts();
+            FieldsColorChangeScript.UpdateMap();
 
             //choosen_action = Government.Action.Void; // Не уверен в правильности
         }
@@ -205,7 +207,7 @@ public class Main : MonoBehaviour
         // Прописать нормальные цены
 
         private static Dictionary<string, float> base_food_costs = new Dictionary<string, float> {
-            {"Colonize", 0 },
+            {"Colonize", 10 },
             {"FoundCity", 0 },
             {"AppointGovernor", 0 },
             {"TakeTaxes", 0 },
@@ -247,6 +249,24 @@ public class Main : MonoBehaviour
         };
 
         private Dictionary<string, float>[] costs = new Dictionary<string, float>[] { base_food_costs, base_materials_costs, base_jewelry_costs };
+
+
+        public float GetPopulation()
+        {
+            return population;
+        }
+        public float GetFood()
+        {
+            return food;
+        }
+        public float GetMaterials()
+        {
+            return materials;
+        }
+        public float GetJewelry()
+        {
+            return jewelry;
+        }
 
         public enum Action
         {
@@ -300,7 +320,6 @@ public class Main : MonoBehaviour
                     if (isNeighbour(map, id, coords) && food >= costs[0]["Colonize"] && materials >= costs[1]["Colonize"] && jewelry >= costs[2]["Colonize"])
                     {
                         map[coords[0], coords[1]].government = governments[id - 1];
-                        FieldsColorChangeScript.UpdateMap();
                         food -= costs[0]["Colonize"];
                         materials -= costs[1]["Colonize"];
                         jewelry -= costs[2]["Colonize"];
@@ -309,16 +328,12 @@ public class Main : MonoBehaviour
                     }
                     break;
                 case Action.FoundCity:
-                    FieldsColorChangeScript.UpdateMap();
                     break;
                 case Action.AppointGovernor:
-                    FieldsColorChangeScript.UpdateMap();
                     break;
                 case Action.TakeTaxes:
-                    FieldsColorChangeScript.UpdateMap();
                     break;
                 case Action.GiveBribe:
-                    FieldsColorChangeScript.UpdateMap();
                     break;
                 case Action.Attack:
                     Debug.LogWarning("ATTACK");
@@ -371,8 +386,6 @@ public class Main : MonoBehaviour
                             map[coords[0], coords[1]].government = governments[id - 1];
                         }
 
-                        FieldsColorChangeScript.UpdateMap();
-
                         food -= costs[0]["Attack"];
                         materials -= costs[1]["Attack"];
                         jewelry -= costs[2]["Attack"];
@@ -381,16 +394,12 @@ public class Main : MonoBehaviour
                     }
                     break;
                 case Action.Rob:
-                    FieldsColorChangeScript.UpdateMap();
                     break;
                 case Action.BoostArmy:
-                    FieldsColorChangeScript.UpdateMap();
                     break;
                 case Action.Research:
-                    FieldsColorChangeScript.UpdateMap();
                     break;
                 case Action.Diplomacy:
-                    FieldsColorChangeScript.UpdateMap();
                     break;
                 default:
                     break;
