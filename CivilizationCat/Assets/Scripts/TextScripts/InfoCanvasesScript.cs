@@ -83,6 +83,16 @@ public class InfoCanvasesScript : MonoBehaviour
             {
                 header_text.GetComponent<TextMeshProUGUI>().color = FieldsColorChangeScript.colors[field.government.id];
                 main_info_text.GetComponent<TextMeshProUGUI>().text = "Государство: " + field.government.id + "\nМестность: " + landscape;
+
+                main_info_text.GetComponent<TextMeshProUGUI>().text += "\nПопуляция: " + Main.Government.governments[field.government.id - 1].population.ToString();
+                main_info_text.GetComponent<TextMeshProUGUI>().text += "\nЕда: " + Main.Government.governments[field.government.id - 1].food.ToString();
+                main_info_text.GetComponent<TextMeshProUGUI>().text += "\nМатериалы: " + Main.Government.governments[field.government.id - 1].materials.ToString();
+                main_info_text.GetComponent<TextMeshProUGUI>().text += "\nДрагоценности: " + Main.Government.governments[field.government.id - 1].jewelry.ToString();
+
+                main_info_text.GetComponent<TextMeshProUGUI>().text += "\nПехота: " + Main.Government.governments[field.government.id - 1].infantry.ToString();
+                main_info_text.GetComponent<TextMeshProUGUI>().text += "\nРыцари: " + Main.Government.governments[field.government.id - 1].knights.ToString();
+                main_info_text.GetComponent<TextMeshProUGUI>().text += "\nОсада: " + Main.Government.governments[field.government.id - 1].siege.ToString();
+
             }
         }
 

@@ -12,7 +12,6 @@ public class ResourcesTextScript : MonoBehaviour
     private static TextMeshProUGUI materials_text;
     private static TextMeshProUGUI jewelry_text;
 
-    // Start is called before the first frame update
     void Awake()
     {
         population_text = resource_texts[0].GetComponent<TextMeshProUGUI>();
@@ -21,14 +20,12 @@ public class ResourcesTextScript : MonoBehaviour
         jewelry_text = resource_texts[3].GetComponent<TextMeshProUGUI>();
 
     }
-
-    // Update is called once per frame
     public static void UpdateTexts()
     {
-        population_text.text = Main.Government.governments[0].GetPopulation().ToString();
-        food_text.text = Main.Government.governments[0].GetFood().ToString();
-        materials_text.text = Main.Government.governments[0].GetMaterials().ToString();
-        jewelry_text.text = Main.Government.governments[0].GetJewelry().ToString();
+        population_text.text = Main.Government.governments[0].population.ToString();
+        food_text.text = Main.Government.governments[0].food.ToString();
+        materials_text.text = Main.Government.governments[0].materials.ToString();
+        jewelry_text.text = Main.Government.governments[0].jewelry.ToString();
     }
 
  

@@ -123,8 +123,7 @@ public class Main : MonoBehaviour
 
         } while (!isGeneratedCorrectly);
 
-        FieldsColorChangeScript.UpdateMap();
-        ResourcesTextScript.UpdateTexts();
+        UptadeFrame();
     }
 
     
@@ -178,36 +177,42 @@ public class Main : MonoBehaviour
             coords = new int[] { -1, -1 };
             is_coords_choosen = false;
 
-            ResourcesTextScript.UpdateTexts();
-            FieldsColorChangeScript.UpdateMap();
-
+            UptadeFrame();
             //choosen_action = Government.Action.Void; // Не уверен в правильности
         }
     }
 
+    public static void UptadeFrame()
+    {
+        FieldsColorChangeScript.UpdateMap();
+        ResourcesTextScript.UpdateTexts();
+        ArmyTextScript.UpdateTexts();
+    }
 
     public class Government
     {
         public static Government[] governments;
         public int id;
 
-        private float population;
-        private float food;
-        private float materials;
-        private float jewelry;
+        // Ресурсы
+
+        public float population;
+        public float food;
+        public float materials;
+        public float jewelry;
 
         // Армия
 
-        public float infantry = 1;
+        public float infantry;
         public float knights;
-        public float siege = 1;
+        public float siege;
 
 
 
         // Прописать нормальные цены
 
         private static Dictionary<string, float> base_food_costs = new Dictionary<string, float> {
-            {"Colonize", 10 },
+            {"Colonize", 2 },
             {"FoundCity", 0 },
             {"AppointGovernor", 0 },
             {"TakeTaxes", 0 },
@@ -251,22 +256,8 @@ public class Main : MonoBehaviour
         private Dictionary<string, float>[] costs = new Dictionary<string, float>[] { base_food_costs, base_materials_costs, base_jewelry_costs };
 
 
-        public float GetPopulation()
-        {
-            return population;
-        }
-        public float GetFood()
-        {
-            return food;
-        }
-        public float GetMaterials()
-        {
-            return materials;
-        }
-        public float GetJewelry()
-        {
-            return jewelry;
-        }
+        
+
 
         public enum Action
         {
@@ -308,6 +299,10 @@ public class Main : MonoBehaviour
             food = 100;
             materials = 50;
             jewelry = 0;
+
+            infantry = 1;
+            knights = 0;
+            siege = 1;
         }
 
         // Для игрока
@@ -357,21 +352,22 @@ public class Main : MonoBehaviour
                         {
                             case FieldClass.Field.Landscape.Plain:
                                 strenght = (3 * infantry) + (6 * knights) + (0 * siege);
-                                enemy_strenght = (3 * infantry) + (6 * knights) + (0 * siege);
+                                enemy_strenght = (3 * enemy_infantry) + (6 * enemy_knights) + (0 * enemy_siege);
                                 break;
                             case FieldClass.Field.Landscape.Forest:
                                 strenght = (3 * infantry) + (5 * knights) + (0 * siege);
-                                enemy_strenght = (5 * infantry) + (5 * knights) + (0 * siege);
+                                enemy_strenght = (5 * enemy_infantry) + (5 * enemy_knights) + (0 * enemy_siege);
                                 break;
                             case FieldClass.Field.Landscape.Mountain:
                                 strenght = (3 * infantry) + (0 * knights) + (3 * siege);
-                                enemy_strenght = (7 * infantry) + (0 * knights) + (1 * siege);
+                                enemy_strenght = (7 * enemy_infantry) + (0 * enemy_knights) + (1 * enemy_siege);
                                 break;
                             default: // Форт или город
                                 strenght = (3 * infantry) + (0 * knights) + (27 * siege);
-                                enemy_strenght = (9 * infantry) + (0 * knights) + (9 * siege);
+                                enemy_strenght = (9 * enemy_infantry) + (0 * enemy_knights) + (9 * enemy_siege);
                                 break;
                         }
+
                         Debug.LogWarning(landscape);
                         Debug.LogWarning(strenght);
                         Debug.LogWarning(enemy_strenght);
@@ -379,18 +375,81 @@ public class Main : MonoBehaviour
                         System.Random random = new System.Random();
                         win_chance += (float)random.NextDouble()/5f - 0.1f; // Элемент рандома
 
-                        Debug.LogWarning(win_chance);
+                        if (win_chance > 1)
+                            win_chance = 1;
+                        if (win_chance < 0)
+                            win_chance = 0;
 
-                        if (random.NextDouble() < win_chance)
-                        {
-                            map[coords[0], coords[1]].government = governments[id - 1];
-                        }
+                        Debug.LogWarning(win_chance);
 
                         food -= costs[0]["Attack"];
                         materials -= costs[1]["Attack"];
                         jewelry -= costs[2]["Attack"];
 
-                        return true;
+                        // Расчёт потерь войск
+
+                        // Для игрока
+
+                        float losses = 0.5f - (win_chance / 2);
+
+                        float infantry_losses = infantry * losses;
+                        float knights_losses = knights * losses;
+                        float siege_losses = siege * losses;
+
+                        // Округление
+                        if (random.NextDouble() < infantry_losses % 1)
+                            infantry_losses = (float)System.Math.Ceiling(infantry_losses);
+                        else
+                            infantry_losses = (float)System.Math.Floor(infantry_losses);
+
+                        if (random.NextDouble() < knights_losses % 1)
+                            knights_losses = (float)System.Math.Ceiling(knights_losses);
+                        else
+                            knights_losses = (float)System.Math.Floor(knights_losses);
+
+                        if (random.NextDouble() < siege_losses % 1)
+                            siege_losses = (float)System.Math.Ceiling(siege_losses);
+                        else
+                            siege_losses = (float)System.Math.Floor(siege_losses);
+
+                        infantry -= infantry_losses;
+                        knights -= knights_losses;
+                        siege -= siege_losses;
+
+
+                        // Для врага
+
+                        losses = 0.5f - ((1 - win_chance) / 2);
+
+                        infantry_losses = enemy_infantry * losses;
+                        knights_losses = enemy_knights * losses;
+                        siege_losses = enemy_siege * losses;
+
+                        // Округление
+                        if (random.NextDouble() < infantry_losses % 1)
+                            infantry_losses = (float)System.Math.Ceiling(infantry_losses);
+                        else
+                            infantry_losses = (float)System.Math.Floor(infantry_losses);
+
+                        if (random.NextDouble() < knights_losses % 1)
+                            knights_losses = (float)System.Math.Ceiling(knights_losses);
+                        else
+                            knights_losses = (float)System.Math.Floor(knights_losses);
+
+                        if (random.NextDouble() < siege_losses % 1)
+                            siege_losses = (float)System.Math.Ceiling(siege_losses);
+                        else
+                            siege_losses = (float)System.Math.Floor(siege_losses);
+
+                        governments[enemy_government.id - 1].infantry -= infantry_losses;
+                        governments[enemy_government.id - 1].knights -= knights_losses;
+                        governments[enemy_government.id - 1].siege -= siege_losses;
+
+                        if (random.NextDouble() < win_chance)
+                        {
+                            map[coords[0], coords[1]].government = governments[id - 1];
+                            return true;
+                        }
                     }
                     break;
                 case Action.Rob:
@@ -413,15 +472,14 @@ public class Main : MonoBehaviour
         public static bool isNeighbour(FieldClass.Field[,] map, int number_of_target_government, int[] coords, bool isFindGovernment = false)
         {
             int[,] neighbours = FindNeighbours(map, number_of_target_government, isFindGovernment);
-
+            
             for (int i = 0; i < neighbours.GetLength(0); i++)
                 if (neighbours[i, 0] == coords[0] && neighbours[i, 1] == coords[1])
                     return true;
-                
 
             return false;
         }
-
+        
         public static int[,] FindNeighbours(FieldClass.Field[,] map, int number_of_target_government, bool isFindGovernment = false)
         {
             int[,] neighbours = new int[map.Length, 2];
@@ -469,30 +527,30 @@ public class Main : MonoBehaviour
                                 counter++;
                             }
 
-                            if (i % 2 == 0 && j < map.GetLength(1) - 1)
+                            if (j % 2 == 0 && i < map.GetLength(0) - 1)
                             {
-                                if (i < map.GetLength(0) - 1 && map[i + 1, j + 1].government != null && map[i + 1, j + 1].city_id != number_of_target_government)
+                                if (j < map.GetLength(0) - 1 && map[i + 1, j + 1].government != null && map[i + 1, j + 1].government.id != number_of_target_government)
                                 {
                                     neighbours[counter, 0] = i + 1;
                                     neighbours[counter, 1] = j + 1;
                                     counter++;
                                 }
-                                if (i > 0 && map[i - 1, j + 1].government != null && map[i - 1, j + 1].city_id != number_of_target_government)
-                                {
-                                    neighbours[counter, 0] = i - 1;
-                                    neighbours[counter, 1] = j + 1;
-                                    counter++;
-                                }
-                            }
-                            else if (i % 2 == 1 && j > 0)
-                            {
-                                if (i < map.GetLength(0) - 1 && map[i + 1, j - 1].government != null && map[i + 1, j - 1].city_id != number_of_target_government)
+                                if (j > 0 && map[i + 1, j - 1].government != null && map[i + 1, j - 1].government.id != number_of_target_government)
                                 {
                                     neighbours[counter, 0] = i + 1;
                                     neighbours[counter, 1] = j - 1;
                                     counter++;
                                 }
-                                if (i > 0 && map[i - 1, j - 1].government != null && map[i - 1, j - 1].city_id != number_of_target_government)
+                            }
+                            else if (j % 2 == 1 && i > 0)
+                            {
+                                if (j < map.GetLength(0) - 1 && map[i - 1, j + 1].government != null && map[i - 1, j + 1].government.id != number_of_target_government)
+                                {
+                                    neighbours[counter, 0] = i - 1;
+                                    neighbours[counter, 1] = j + 1;
+                                    counter++;
+                                }
+                                if (j > 0 && map[i - 1, j - 1].government != null && map[i - 1, j - 1].government.id != number_of_target_government)
                                 {
                                     neighbours[counter, 0] = i - 1;
                                     neighbours[counter, 1] = j - 1;
